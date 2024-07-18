@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h1>Vue3-Element-Admin-Thin</h1>
+    <h1>Vue3-Element-Admin-Thin test</h1>
   </div>
 </template>
 
