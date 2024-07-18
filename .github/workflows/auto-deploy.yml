@@ -1,0 +1,46 @@
+name: auto deploy 🚀
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+
+    - name: Install pnpm
+      run: npm install pnpm -g
+
+    - name: Install dependencies
+      run: pnpm i
+
+    - name: Build application 🔧
+      run: pnpm run build:prod
+
+    - name: Deploy 🚀
+      uses: JamesIves/github-pages-deploy-action@v4
+      if: github.ref == 'refs/heads/main'
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        branch: gh-pages
+        folder: dist
+        clean: true
